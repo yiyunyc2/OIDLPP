@@ -1,0 +1,304 @@
+@prefix afo: <https://w3id.org/afo/onto/1.1#> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix event: <http://purl.org/NET/c4dm/event.#> .
+@prefix mo: <http://purl.org/ontology/mo/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix qudt: <http://qudt.org/1.1/schema/qudt#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix tl: <http://purl.org/NET/c4dm/timeline.#> .
+@prefix unit: <http://qudt.org/1.1/vocab/unit#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+afo: a owl:Ontology ;
+    dc:creator "Alo Allik",
+        "Gyorgy Fazekas" ;
+    dc:date "2016-10-07T11:55:40.361258" ;
+    dc:description "This ontology represents the feature extraction workflow of automatically extracted features from audio signals on different levels of abstraction. It updates the original Audio Feature Ontology http://purl.org/ontology/af/."@en ;
+    dc:rights "This ontology is distributed under a Creative Commons License - http://creativecommons.org/licenses/by-sa/4.0/" ;
+    dc:title "Audio Feature Ontology"@en ;
+    dcterms:license <http://creativecommons.org/licenses/by-sa/4.0/> ;
+    owl:versionInfo "Version 1.1" .
+
+afo:Aggregation a owl:Class ;
+    rdfs:label "Aggregation"@en ;
+    rdfs:comment "Abstract class Aggregation represents a computational operation in audio feature extraction computational workflow"@en ;
+    rdfs:subClassOf afo:Operation .
+
+afo:Filter a owl:Class ;
+    rdfs:label "Filter"@en ;
+    rdfs:comment "Abstract class Filter represents a computational operation in audio feature extraction computational workflow"@en ;
+    rdfs:subClassOf afo:Operation .
+
+afo:FirstOperation a owl:Class ;
+    rdfs:label "First Operation"@en ;
+    rdfs:comment "First computational operation in a feature extraction sequence of operations"@en ;
+    rdfs:subClassOf afo:Operation .
+
+afo:LastOperation a owl:Class ;
+    rdfs:label "Last Operation"@en ;
+    rdfs:comment "Last computational operation in a feature extraction sequence of operations"@en ;
+    rdfs:subClassOf afo:Operation .
+
+afo:OptionalOperation a owl:Class ;
+    rdfs:label "Optional Operation"@en ;
+    rdfs:comment "Optional computational operation in a feature extraction sequence of operations"@en ;
+    rdfs:subClassOf afo:Operation .
+
+afo:Point a owl:Class ;
+    rdfs:label "Point"@en ;
+    rdfs:comment "Represents a feature at an instant of time"@en ;
+    rdfs:subClassOf afo:AudioFeature .
+
+afo:Segment a [ a owl:Restriction ;
+            owl:onProperty event:time ;
+            owl:someValuesFrom tl:Interval ],
+        owl:Class ;
+    rdfs:label "Segment"@en ;
+    rdfs:comment "Represents a feature spanning an interval of time"@en ;
+    rdfs:subClassOf afo:AudioFeature .
+
+afo:Signal a owl:Class ;
+    rdfs:label "Signal"@en ;
+    rdfs:comment "Represents a dense signal-like feature"@en ;
+    rdfs:subClassOf mo:Signal,
+        afo:AudioFeature .
+
+afo:Transformation a owl:Class ;
+    rdfs:label "Transformation"@en ;
+    rdfs:comment "Abstract class Transformation represents a computational operation in audio feature extraction computational workflow"@en ;
+    rdfs:subClassOf afo:Operation .
+
+afo:agent a owl:FunctionalProperty,
+        owl:ObjectProperty ;
+    rdfs:label "agent"@en ;
+    rdfs:comment "links an operating system description to context"@en ;
+    rdfs:domain afo:Context ;
+    rdfs:range prov:SoftwareAgent .
+
+afo:computed_by a owl:ObjectProperty ;
+    rdfs:label "computed_by"@en ;
+    rdfs:comment "links an audio feature to a feature extractor"@en ;
+    rdfs:domain afo:AudioFeature ;
+    rdfs:range afo:FeatureExtractor .
+
+afo:confidence a owl:DatatypeProperty ;
+    rdfs:label "confidence"@en ;
+    rdfs:comment "links a confidence value to a result"@en ;
+    rdfs:domain afo:AudioFeature ;
+    rdfs:range xsd:float .
+
+afo:context a owl:ObjectProperty ;
+    rdfs:label "context"@en ;
+    rdfs:comment "links an audio feature extractor to a system context"@en ;
+    rdfs:domain afo:Instance ;
+    rdfs:range afo:Context .
+
+afo:data_type a owl:DatatypeProperty ;
+    rdfs:label "data_type"@en ;
+    rdfs:comment "parameter data type"@en ;
+    rdfs:domain afo:Parameter ;
+    rdfs:range xsd:anySimpleType .
+
+afo:default_value a owl:DatatypeProperty ;
+    rdfs:label "default_value"@en ;
+    rdfs:comment "default parameter value"@en ;
+    rdfs:domain afo:Parameter ;
+    rdfs:range xsd:anySimpleType .
+
+afo:described_in a owl:ObjectProperty ;
+    rdfs:label "described_in"@en ;
+    rdfs:comment "links model to an external resource that describes it"@en ;
+    rdfs:domain afo:AudioFeature ;
+    rdfs:range bibo:Document .
+
+afo:description a owl:DatatypeProperty ;
+    rdfs:label "description"@en ;
+    rdfs:comment "parameter description"@en ;
+    rdfs:domain afo:Parameter ;
+    rdfs:range xsd:string .
+
+afo:dimensions a owl:ObjectProperty ;
+    rdfs:label "dimensions"@en ;
+    rdfs:comment "links dimensions of a feature to feature extraction result"@en ;
+    rdfs:domain afo:AudioFeature ;
+    rdfs:range rdf:List .
+
+afo:feature a owl:ObjectProperty ;
+    rdfs:label "feature"@en ;
+    rdfs:comment "feature of a feature"@en ;
+    rdfs:domain afo:AudioFeature ;
+    rdfs:range afo:AudioFeature .
+
+afo:first_operation a owl:FunctionalProperty,
+        owl:ObjectProperty ;
+    rdfs:label "first_operation"@en ;
+    rdfs:comment "first operation in a sequence"@en ;
+    rdfs:domain afo:OperationSequence ;
+    rdfs:range afo:Operation ;
+    rdfs:subPropertyOf afo:operation .
+
+afo:implemented_in a owl:ObjectProperty ;
+    rdfs:label "implemented_in"@en ;
+    rdfs:comment "links a feature extractor to a SoftwareAgent"@en ;
+    rdfs:domain afo:FeatureExtractor ;
+    rdfs:range prov:SoftwareAgent .
+
+afo:implements a owl:ObjectProperty ;
+    rdfs:label "implements"@en ;
+    rdfs:comment "links an audio feature extractor to an audio feature"@en ;
+    rdfs:domain afo:FeatureExtractor ;
+    rdfs:range afo:AudioFeature .
+
+afo:input a owl:ObjectProperty ;
+    rdfs:label "input"@en ;
+    rdfs:comment "links input to a computational operation"@en ;
+    rdfs:domain afo:Operation .
+
+afo:maximum_value a owl:DatatypeProperty ;
+    rdfs:label "maximum_value"@en ;
+    rdfs:comment "maximum parameter value"@en ;
+    rdfs:domain afo:Parameter ;
+    rdfs:range xsd:anySimpleType .
+
+afo:minimum_value a owl:DatatypeProperty ;
+    rdfs:label "minimum_value"@en ;
+    rdfs:comment "minimum parameter value"@en ;
+    rdfs:domain afo:Parameter ;
+    rdfs:range xsd:anySimpleType .
+
+afo:name a owl:DatatypeProperty ;
+    rdfs:label "name"@en ;
+    rdfs:comment "feature extraction parameter name"@en ;
+    rdfs:domain afo:Parameter ;
+    rdfs:range xsd:string .
+
+afo:next_operation a owl:FunctionalProperty,
+        owl:ObjectProperty ;
+    rdfs:label "next_operation"@en ;
+    rdfs:comment "link between operations in a sequence"@en ;
+    rdfs:domain afo:Operation ;
+    rdfs:range afo:Operation ;
+    rdfs:subPropertyOf afo:operation .
+
+afo:output a owl:ObjectProperty ;
+    rdfs:label "output"@en ;
+    rdfs:comment "links an abstract output type to a computational operation"@en ;
+    rdfs:domain afo:Operation ;
+    rdfs:range afo:AudioFeature .
+
+afo:parameter a owl:ObjectProperty ;
+    rdfs:label "parameter"@en ;
+    rdfs:comment "links parameters to audio features"@en ;
+    rdfs:domain afo:Operation ;
+    rdfs:range afo:Parameter .
+
+afo:sequence a owl:FunctionalProperty,
+        owl:ObjectProperty ;
+    rdfs:label "sequence"@en ;
+    rdfs:comment "links a model to computational sequence"@en ;
+    rdfs:domain afo:AudioFeature ;
+    rdfs:range afo:OperationSequence .
+
+afo:unit a owl:ObjectProperty ;
+    rdfs:label "unit"@en ;
+    rdfs:comment "parameter unit"@en ;
+    rdfs:domain afo:Parameter ;
+    rdfs:range unit:unit .
+
+afo:value a owl:DatatypeProperty,
+        owl:ObjectProperty ;
+    rdfs:label "value"@en ;
+    rdfs:comment "links a feature value to an audio feature"@en,
+        "parameter value"@en ;
+    rdfs:domain afo:AudioFeature,
+        afo:Parameter ;
+    rdfs:range xsd:anySimpleType .
+
+afo:values a owl:ObjectProperty ;
+    rdfs:label "values"@en ;
+    rdfs:comment "links a sequence of values to an audio feature"@en ;
+    rdfs:domain afo:AudioFeature ;
+    rdfs:range rdf:Collection .
+
+afo:Instance a owl:Class ;
+    rdfs:label "Audio feature extractor instance"@en ;
+    rdfs:comment "Represents an instance of a feature extractor"@en .
+
+afo:implementation a owl:ObjectProperty ;
+    rdfs:label "implementation"@en ;
+    rdfs:comment "links an audio feature to an implementation"@en ;
+    rdfs:domain afo:Model ;
+    rdfs:range afo:FeatureExtractor ;
+    owl:inverseOf afo:implementation_of .
+
+afo:implementation_of a owl:ObjectProperty ;
+    rdfs:label "implementation_of"@en ;
+    rdfs:comment "inverse of implementation to link an implemented algorithm to a computational model"@en ;
+    rdfs:domain afo:FeatureExtractor ;
+    rdfs:range afo:Model ;
+    owl:inverseOf afo:implementation .
+
+afo:model a owl:ObjectProperty ;
+    rdfs:label "model"@en ;
+    rdfs:comment "links audio feature to a computational model"@en ;
+    rdfs:domain afo:AudioFeature ;
+    rdfs:range afo:Model ;
+    owl:inverseOf afo:model_of .
+
+afo:model_of a owl:ObjectProperty ;
+    rdfs:label "model_of"@en ;
+    rdfs:comment "inverse of model to link a computational model to an audio feature"@en ;
+    rdfs:domain afo:Model ;
+    rdfs:range afo:AudioFeature ;
+    owl:inverseOf afo:model .
+
+afo:Context a owl:Class ;
+    rdfs:label "Audio feature extractor context"@en ;
+    rdfs:comment "Represents the software and hardware context of a feature extractor instance"@en .
+
+afo:OperationSequence a owl:Class ;
+    rdfs:label "Operation Sequence"@en ;
+    rdfs:comment "Represents a sequence of mathematical operations"@en .
+
+afo:Model a owl:Class ;
+    rdfs:label "Model"@en ;
+    rdfs:comment "Represents an abstract model of an audio feature"@en .
+
+afo:operation a owl:FunctionalProperty,
+        owl:ObjectProperty ;
+    rdfs:label "operation"@en ;
+    rdfs:comment "abstract property"@en ;
+    rdfs:domain afo:Operation ;
+    rdfs:range afo:Operation .
+
+afo:FeatureExtractor a owl:Class ;
+    rdfs:label "Audio feature extractor implementation"@en ;
+    rdfs:comment "Represents a specific implementation of an audio feature"@en ;
+    rdfs:subClassOf afo:Operation .
+
+afo:Parameter a owl:Class ;
+    rdfs:label "Parameter for audio feature extractor"@en ;
+    rdfs:comment "Represents a parameter for an audio feature extraction algorithm"@en .
+
+afo:AudioFeature a [ a owl:Restriction ;
+            owl:allValuesFrom afo:Operation ;
+            owl:onProperty afo:operation ],
+        [ a owl:Restriction ;
+            owl:cardinality "1"^^xsd:int ;
+            owl:onProperty afo:operation ],
+        owl:Class ;
+    rdfs:label "Audio feature"@en ;
+    rdfs:comment "Represents abstract conceptualisation of an audio feature"@en ;
+    rdfs:subClassOf event:Event .
+
+afo:Operation a owl:Class ;
+    rdfs:label "Computational Operation"@en ;
+    rdfs:comment "Represents a computational operation in the feature extraction workflow"@en ;
+    rdfs:subClassOf prov:SoftwareAgent .
+

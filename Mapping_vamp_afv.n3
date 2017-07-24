@@ -1,0 +1,46 @@
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:      <http://www.w3.org/2002/07/owl#> .
+@prefix vamp:     <http://purl.org/ontology/vamp/> .
+@prefix plugbase: <http://vamp-plugins.org/rdf/plugins/qm-vamp-plugins#> .
+@prefix afo: <https://w3id.org/afo/onto/1.1#> .
+@prefix afv: <https://w3id.org/afo/vocab/1.1#> .
+
+plugbase:qm-keydetector a vamp:Plugin ;
+	rdfs:label "Key detector"@en ;
+	rdfs:comment "key detector plugin";
+	vamp:computes_event_type afv:Key.
+
+plugbase:mean a  vamp:Plugin ;
+	rdfs:label "Mean"@en ;
+	rdfs:comment "Mean plugin";
+	vamp:computes_event_type afv:Mean. 
+
+plugbase:rolloff a vamp:Plugin ;
+	rdfs:label "Roll Off"@en ;
+	rdfs:comment "Roll off plugin";
+	vamp:computes_event_type afv:RollOff.
+
+plugbase:spectral_centroid a vamp:Plugin;
+	rdfs:label "Spectral Centroid"@en;
+	rdfs:comment "Spectral Centroid plugin";
+	vamp:computes_event_type afv:SpectralCentroid.
+
+plugbase:zcr a vamp:Plugin;
+	rdfs:label "Zero Crossing Rate"@en;
+	rdfs:comment "Zero Crossing Rate plugin";
+	vamp:computes_event_type afv:ZeroCrossingRate.
+
+plugbase:sum a vamp:Plugin;
+	rdfs:label "Sum"@en;
+	rdfs:comment "Sum plugin";
+	vamp:computes_event_type afv:Sum.
+
+plugbase:qm-chromagram a vamp:Plugin;
+	rdfs:label "Chromagram"@en;
+	rdfs:comment "Chromagram plugin";
+	vamp:computes_event_type afv:Chromagram.
+
+plugbase:qm-tempotracker a vamp:Plugin;
+	rdfs:label "Tempo and Beat Tracker"@en;
+	rdfs:comment "Tempo and Beat Tracker plugin";
+	vamp:computes_event_type afv:BeatTracker.
