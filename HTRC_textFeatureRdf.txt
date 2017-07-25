@@ -1,7 +1,3 @@
-htrc:EmojiChar.., urlchar, twwitterchar..
-htrc:SentenceSegmentation
-
-
 @prefix afo: <https://w3id.org/afo/onto/1.1#> .
 @prefix afv: <https://w3id.org/afo/vocab/1.1#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
