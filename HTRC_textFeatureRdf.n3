@@ -1,0 +1,282 @@
+@prefix afo: <https://w3id.org/afo/onto/1.1#> .
+@prefix afv: <https://w3id.org/afo/vocab/1.1#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix event: <http://purl.org/NET/c4dm/event.#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix htrc: <http://example.org/htrc#>.
+@prefix opennlp: <http://example.org/opennlp#>.
+
+htrc:TextFeature a [ a owl:Restriction ;
+            owl:allValuesFrom afo:Operation ;
+            owl:onProperty afo:operation ],
+        [ a owl:Restriction ;
+            owl:cardinality "1"^^xsd:int ;
+            owl:onProperty afo:operation ],
+        owl:Class ;
+    rdfs:label "Text Feature"@en ;
+    rdfs:comment "Represents abstract conceptualisation of a text feature"@en ;
+    rdfs:subClassOf event:Event .
+	
+#LDA
+opennlp:LDA a owl:Class ;
+	rdfs:label "LDA"@en ;
+	rdfs:subClassOf htrc:TextFeature ;
+	afo:model htrc:LDAModel.
+
+htrc:LDAModel a afo:Model ;
+	rdfs:label "LDA Model"@en ;
+	rdfs:comment "Topic Modeling technique that takes each text or document as a bag of words" ;
+	afo:sequence htrc:LDA_operation_sequence.
+
+htrc:LDA_operation_1 a htrc:Tokenization ;
+	rdfs:label "LDA_operation_1"@en ;
+	rdfs:comment "LDA sequence step 1";
+	afo:next_operation htrc:LDA_operation_2 . 
+	
+htrc:LDA_operation_2 a htrc:POStagMethod ;
+	rdfs:label "LDA_operation_2"@en ;
+	rdfs:comment "LDA sequence step 2" ;
+	afo:next_operation htrc:LDA_operation_3 . 
+
+htrc:LDA_operation_3 a htrc:ProbsMethod ;
+	rdfs:label "LDA_operation_3"@en ;
+	rdfs:comment "LDA sequence step 3" ;
+	afo:next_operation htrc:LDA_operation_4 . 
+
+htrc:LDA_operation_4 a htrc:TopKSequencesMethod ;
+	rdfs:label "LDA_operation_4"@en ;
+	rdfs:comment "LDA sequence step 4" ;
+	afo:next_operation htrc:LDA_operation_5 . 
+	
+htrc:LDA_operation_5 a htrc:Lemmatization ;
+	rdfs:label "LDA_operation_5"@en ;
+	rdfs:comment "LDA sequence step 5" ;
+	afo:next_operation htrc:LDA_operation_6 . 
+
+htrc:LDA_operation_6 a htrc:CaseFolding;
+	rdfs:label "LDA_operation_6"@en ;
+	rdfs:comment "LDA sequence step 6" ;
+	afo:next_operation htrc:LDA_operation_7 . 
+
+htrc:LDA_operation_7 a afo:LastOperation,
+	htrc:StopListing;
+	rdfs:label "LDA_operation_7"@en ;
+	rdfs:comment "LDA sequence step 7".
+
+htrc:LDA_operation_sequence a afo:OperationSequence ;
+	afo:first_operation htrc:LDA_operation_1.
+
+
+#Chunker
+opennlp:Chunker a owl:Class ;
+	rdfs:label "Chunker"@en ;
+	rdfs:subClassOf htrc:TextFeature ;
+	afo:model htrc:ChunkerModel.
+
+htrc:ChunkerModel a afo:Model ;
+	rdfs:label "Chunker Model"@en ;
+	rdfs:comment "The Part of Speech Tagger marks tokens with their corresponding word type based on the token itself and the context of the token" ;
+	afo:sequence htrc:Chunker_operation_sequence .
+	
+htrc:Chunker_operation_1 a htrc:Tokenization ;
+	rdfs:label "Chunker_operation_1"@en ;
+	rdfs:comment "Chunker sequence step 1";
+	afo:next_operation htrc:Chunker_operation_2 . 
+
+htrc:Chunker_operation_2 a htrc:POStagMethod ;
+	rdfs:label "Chunker_operation_2"@en ;
+	rdfs:comment "Chunker sequence step 2" ;
+	afo:next_operation htrc:Chunker_operation_3 .
+
+htrc:Chunker_operation_3 a htrc:ProbsMethod ;
+	rdfs:label "Chunker_operation_3"@en ;
+	rdfs:comment "Chunker sequence step 3" ;
+	afo:next_operation htrc:Chunker_operation_4 . 
+
+htrc:Chunker_operation_4 a afo:LastOperation,
+	htrc:TopKSequencesMethod ;
+	rdfs:label "Chunker_operation_4"@en ;
+	rdfs:comment "Chunker sequence step 4".
+
+htrc:Chunker_operation_sequence a afo:OperationSequence ;
+	afo:first_operation htrc:Chunker_operation_1.
+
+
+#Name Entity Recognition 
+opennlp:NER a owl:Class ;
+	rdfs:label "NER"@en ;
+	rdfs:subClassOf htrc:TextFeature ;
+	afo:model htrc:NERModel.
+
+htrc:NERModel a afo:Model ;
+	rdfs:label "NER Model"@en ;
+	rdfs:comment "Detect names in text" ;
+	afo:sequence htrc:NER_operation_sequence .
+
+htrc:NER_operation_1 a htrc:SentenceSegmentation ;
+	rdfs:label "NER_operation_1"@en ;
+	rdfs:comment "NER sequence step 1";
+	afo:next_operation htrc:NER_operation_2 . 	
+	
+htrc:NER_operation_2 a htrc:Tokenization ;
+	rdfs:label "NER_operation_2"@en ;
+	rdfs:comment "NER sequence step 2";
+	afo:next_operation htrc:NER_operation_3. 
+
+htrc:NER_operation_3 a htrc:POStagMethod ;
+	rdfs:label "NER_operation_3"@en ;
+	rdfs:comment "NER sequence step 3" ;
+	afo:next_operation htrc:LDA_operation_4 . 
+
+htrc:NER_operation_4 a htrc:ImportCorpus ;
+	rdfs:label "NER_operation_4"@en ;
+	rdfs:comment "NER sequence step 4" ;
+	afo:next_operation htrc:LDA_operation_5 . 
+
+htrc:NER_operation_5 a afo:LastOperation, 
+	htrc:NameExtraction ;
+	rdfs:label "NER_operation_5"@en ;
+	rdfs:comment "NER sequence step 5". 
+
+htrc:NER_operation_sequence a afo:OperationSequence ;
+	afo:first_operation htrc:NER_operation_1.
+
+
+#Tokenizer
+opennlp:Tokenizer a owl:Class ;
+	rdfs:label "Tokenizer"@en ;
+	rdfs:subClassOf htrc:TextFeature ;
+	afo:model htrc:TokenizerModel.
+
+htrc:TokenizerModel a afo:Model ;
+	rdfs:label "Tokenizer Model"@en ;
+	rdfs:comment "Tokenizers segment an input character sequence into tokens" ;
+	afo:sequence htrc:Tokenizer_operation_sequence .
+	
+htrc:Tokenizer_operation_1 a htrc:SentenceSegmentation ;
+	rdfs:label "Tokenizer_operation_1"@en ;
+	rdfs:comment "Tokenizer sequence step 1" ;
+	afo:next_operation htrc:Tokenizer_operation_2 . 
+
+htrc:Tokenizer_operation_2 a afo:LastOperation,
+	htrc:Tokenization ;
+	rdfs:label "Tokenizer_operation_2"@en ;
+	rdfs:comment "Tokenizer sequence step 2".
+
+htrc:Tokenizer_operation_sequence a afo:OperationSequence ;
+	afo:first_operation htrc:Tokenizer_operation_1.
+
+#Sentence Detector
+opennlp:SentenceDetector a owl:Class ;
+	rdfs:label "Sentence Detector"@en ;
+	rdfs:subClassOf htrc:TextFeature ;
+	afo:model htrc:SentenceDetectorModel.
+
+htrc:SentenceDetectorModel a afo:Model ;
+	rdfs:label "SentenceDetector Model"@en ;
+	rdfs:comment "detect that a punctuation character marks the end of a sentence or not" ;
+	afo:sequence htrc:SentenceDetector_operation_sequence .
+	
+htrc:SentenceDetector_operation_1 a htrc:SentenceSegmentation ;
+	rdfs:label "SentenceDetector_operation_1"@en ;
+	rdfs:comment "SentenceDetector sequence step 1".
+
+htrc:SentenceDetector_operation_sequence a afo:OperationSequence ;
+	afo:first_operation htrc:SentenceDetector_operation_1.
+
+#POStagger
+opennlp:POStagger a owl:Class ;
+	rdfs:label "POStagger"@en ;
+	rdfs:subClassOf htrc:TextFeature ;
+	afo:model htrc:POStaggerModel.
+
+htrc:POStaggerModel a afo:Model ;
+	rdfs:label "POStagger Model"@en ;
+	rdfs:comment "The Part of Speech Tagger marks tokens with their corresponding word type based on the token itself and the context of the token" ;
+	afo:sequence htrc:POStagger_operation_sequence .
+
+htrc:POStagger_operation_1 a htrc:Tokenization ;
+	rdfs:label "POStagger_operation_1"@en ;
+	rdfs:comment "POStagger sequence step 1";
+	afo:next_operation htrc:POStagger_operation_2 . 
+	
+htrc:POStagger_operation_2 a htrc:POStagMethod ;
+	rdfs:label "POStagger_operation_2"@en ;
+	rdfs:comment "POStagger sequence step 2" ;
+	afo:next_operation htrc:POStagger_operation_3 . 
+
+htrc:POStagger_operation_3 a htrc:ProbsMethod ;
+	rdfs:label "POStagger_operation_3"@en ;
+	rdfs:comment "POStagger sequence step 3" ;
+	afo:next_operation htrc:POStagger_operation_4 . 
+
+htrc:POStagger_operation_4 a afo:LastOperation,
+	htrc:TopKSequencesMethod ;
+	rdfs:label "POStagger_operation_4"@en ;
+	rdfs:comment "POStagger sequence step 4".
+
+htrc:POStagger_operation_sequence a afo:OperationSequence ;
+	afo:first_operation htrc:POStagger_operation_1.
+
+
+#All the operations
+
+htrc:Tokenization a owl:Class ;
+    rdfs:label "Tokenization",
+        "Tokenization"@en ;
+    rdfs:comment "Tokenizers segment an input character sequence into tokens";
+    rdfs:subClassOf htrc:TextFeature.
+
+htrc:POStagMethod a owl:Class ;
+    rdfs:label "POStagMethod",
+        "POStagMethod"@en ;
+    rdfs:comment "POS tagger";
+    rdfs:subClassOf htrc:TextFeature.
+
+htrc:ProbsMethod a owl:Class ;
+    rdfs:label "ProbsMethod",
+        "ProbsMethod"@en ;
+    rdfs:comment "Probability method";
+    rdfs:subClassOf htrc:TextFeature.
+
+htrc:TopKSequencesMethod a owl:Class ;
+    rdfs:label "TopKSequencesMethod",
+        "TopKSequencesMethod"@en ;
+    rdfs:comment "Top K Sequences Method";
+    rdfs:subClassOf htrc:TextFeature.
+ 
+htrc:StopListing a owl:Class ;
+    rdfs:label "StopListing",
+        "StopListing"@en ;
+    rdfs:comment "removing words against a list of common, generally less interesting words";
+    rdfs:subClassOf htrc:TextFeature.
+
+htrc:CaseFolding a owl:Class ;
+    rdfs:label "CaseFolding",
+        "CaseFolding"@en ;
+    rdfs:comment "Uppercases and lowercases fold into the same cases";
+    rdfs:subClassOf htrc:TextFeature.
+
+htrc:Lemmatization a owl:Class ;
+    rdfs:label "Lemmatization",
+        "Lemmatization"@en ;
+    rdfs:comment "folding variants of words together, for example baking,bakes,baked";
+    rdfs:subClassOf htrc:TextFeature.
+
+htrc:SentenceSegmentation a owl:Class ;
+    rdfs:label "Sentence Segmentation";
+    rdfs:comment "Splitting sentences";
+    rdfs:subClassOf htrc:TextFeature.
+
+htrc:ImportCorpus a owl:Class ;
+    rdfs:label "Import Corpus";
+    rdfs:comment "Importing CoNLL, MUC or ACE corpus";
+    rdfs:subClassOf htrc:TextFeature.
+
+htrc:NameExtraction a owl:Class ;
+    rdfs:label "Name Extraction";
+    rdfs:comment "Extract names based on corpus";
+    rdfs:subClassOf htrc:TextFeature.
+        
