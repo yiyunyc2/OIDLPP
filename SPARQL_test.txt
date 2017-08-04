@@ -207,3 +207,38 @@ SELECT distinct ?feature WHERE {
  ?model afo:sequence ?seqid .
  ?feature afo:model ?model .
 }
+
+#10 Find the eTree Track & the artist name where the track has "CombFilter" as an operation step
+prefix prov: <http://www.w3.org/ns/prov#> 
+prefix afo: <https://w3id.org/afo/onto/1.1#> 
+prefix afv: <https://w3id.org/afo/vocab/1.1#> 
+prefix vamp:     <http://purl.org/ontology/vamp/>
+prefix plugbase: <http://vamp-plugins.org/rdf/plugins/qm-vamp-plugins#>
+prefix calma:   <http://calma.linkedmusic.org/vocab/>
+prefix event: <http://purl.org/NET/c4dm/event.owl#>
+prefix mo: <http://purl.org/ontology/mo/>
+
+SELECT distinct ?etreeTrackLabel ?artistName WHERE {
+ BIND(<https://w3id.org/afo/vocab/1.1#CombFilter> as ?optype).
+ ?opid a ?optype . 
+ ?fopid afo:next_operation* ?opid .
+ ?seqid afo:first_operation ?fopid .
+ ?model afo:sequence ?seqid .
+ ?feature afo:model ?model .
+ ?vamp vamp:computes_event_type ?feature .
+ FILTER (?optype != afo:LastOperation).
+ ?calmaTrack prov:hasActivity ?Activity.
+ ?Activity prov:wasAssociatedWith ?vamp.
+ { 
+   SELECT ?etreeTrackLabel ?artistName WHERE {
+     SERVICE <http://etree.linkedmusic.org/sparql> {
+      ?performance event:hasSubEvent ?etreeTrack ;
+        mo:performer ?artist .
+      ?artist skos:prefLabel ?artistName .
+      ?etreeTrack calma:data ?calmaTrack ;
+        skos:prefLabel ?etreeTrackLabel .
+     }
+   } LIMIT 500
+ }
+}
+
